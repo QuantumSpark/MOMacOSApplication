@@ -22,6 +22,7 @@
 		D089B9C11FFC94CF00793B3F /* CollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = D089B9BF1FFC94CF00793B3F /* CollectionViewItem.xib */; };
 		D0D560E41FFF201D009571E9 /* TCPSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D560E31FFF201D009571E9 /* TCPSocketManager.swift */; };
 		D0D560E61FFF22EA009571E9 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D560E51FFF22EA009571E9 /* Helper.swift */; };
+		D0E7A639200315BF00F001FB /* DataIPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7A638200315BF00F001FB /* DataIPad.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		D089B9BF1FFC94CF00793B3F /* CollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewItem.xib; sourceTree = "<group>"; };
 		D0D560E31FFF201D009571E9 /* TCPSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPSocketManager.swift; sourceTree = "<group>"; };
 		D0D560E51FFF22EA009571E9 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		D0E7A638200315BF00F001FB /* DataIPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataIPad.swift; sourceTree = "<group>"; };
 		DA8B1A2E34CC18AEBA881457 /* Pods-MacOSApplicationUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MacOSApplicationUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MacOSApplicationUITests/Pods-MacOSApplicationUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F30E7D6944BB17EB84E594B2 /* Pods_MacOSApplicationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MacOSApplicationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -160,6 +162,7 @@
 				D0D560E51FFF22EA009571E9 /* Helper.swift */,
 				D07438652001663900E7DA3D /* Packet.swift */,
 				D07438692001774C00E7DA3D /* UDPSocketManager.swift */,
+				D0E7A638200315BF00F001FB /* DataIPad.swift */,
 			);
 			path = MacOSApplication;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0D560E41FFF201D009571E9 /* TCPSocketManager.swift in Sources */,
+				D0E7A639200315BF00F001FB /* DataIPad.swift in Sources */,
 				D089B9931FFC92C600793B3F /* ViewController.swift in Sources */,
 				D074386A2001774C00E7DA3D /* UDPSocketManager.swift in Sources */,
 				D0D560E61FFF22EA009571E9 /* Helper.swift in Sources */,

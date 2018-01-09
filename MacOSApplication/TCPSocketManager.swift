@@ -27,9 +27,10 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
     //the socket that will be used to connect to the core app
     var socket: GCDAsyncSocket!
 
-    var listOfItems = [CollectionViewItem]()
-    var corruptedFrames = 0
+    var listOfViewedItems = [CollectionViewItem]()
 
+    var currentStashedData = [DataIPad]()
+    var corruptedFrames = 0
     var deviceID = 0
 
     var newAsyncSocket:GCDAsyncSocket!
@@ -67,20 +68,19 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
 
         var num = 0;
 
-        for i in 0..<listOfItems.count {
-            if listOfItems[i].id == -1 {
-                listOfItems[i].id = i
+        for i in 0..<currentStashedData.count {
+            if !currentStashedData[i].isConnected {
+                currentStashedData[i].isConnected = true
                 num = i
                 break
             }
         }
-
+        currentStashedData[num].socket = newSocket
         print("There are \(numbOfIPads) ipads connected. Its id is \(num)")
-        newAsyncSocket = newSocket
         let welcomMessage = "IPad is now connected to the Mac computer";
-        let welcomePacket =  Packet(type: .handshake, id: num, payload: welcomMessage.data(using: .utf8)!)
-         newAsyncSocket.write(welcomePacket.serialize(), withTimeout: -1, tag: num)
-        newAsyncSocket.readData(withTimeout: -1, tag: num)
+        let welcomePacket = Packet(type: .handshake, id: num, payload: welcomMessage.data(using: .utf8)!)
+        newSocket.write(welcomePacket.serialize(), withTimeout: -1, tag: num)
+        newSocket.readData(withTimeout: -1, tag: num)
 
         // TODO get a message from IPad for connection checking
     }
@@ -88,42 +88,42 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
     public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         sock.readData(withTimeout: -1, tag: tag)
         if tag > -1 {
-            let item = listOfItems[tag]
-            if listOfItems[tag].isConnected {
+            let item2 = currentStashedData[tag]
+            if currentStashedData[tag].isConnected {
 
-                if  item.isDownloading && !item.isPlaying {
-                    if item.videoDownloadSize > -1 {
-                        item.currentVideoContent.append(data)
-                        let progress = Double(100*(Double(item.currentVideoContent.length)/Double(item.videoDownloadSize)))
-                        listOfItems[tag].downloadingProgress.stringValue = "\(round(progress))%"
-                        if (item.currentVideoContent.length == item.videoDownloadSize) {
+                if  item2.isDownloading {
+                    if item2.videoDownloadSize > -1 {
+                        item2.currentVideoContent.append(data)
+                        let progress = Double(100*(Double(item2.currentVideoContent.length)/Double(item2.videoDownloadSize)))
+                        item2.updateDownloadingProgress(with: progress)
+                        if (item2.currentVideoContent.length == item2.videoDownloadSize) {
                             do {
                                 let documents =  FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!
                                 let writePath = documents.appendingPathComponent("Ipad\(tag).mp4")
-                                try item.currentVideoContent.write(to: writePath, options: .atomic)
-                                listOfItems[tag].playingStatus.stringValue = "Finished Downloading"
-                                listOfItems[tag].downloadButton.stringValue = "0.0%"
-                                listOfItems[tag].downloadButton.isHidden = true
-                                listOfItems[tag].isDownloading = false
-                                item.currentVideoContent = NSMutableData()
-                                item.videoDownloadSize = -1
-                                listOfItems[tag].downloadingProgress.isHidden = true
+                                try item2.currentVideoContent.write(to: writePath, options: .atomic)
+                                item2.collectionViewItem?.playingStatus.stringValue = "Finished Downloading"
+                                item2.collectionViewItem?.downloadButton.stringValue = "0.0%"
+                                item2.collectionViewItem?.downloadButton.isHidden = true
+                                item2.isDownloading = false
+                                item2.currentVideoContent = NSMutableData()
+                                item2.videoDownloadSize = -1
+                                item2.collectionViewItem?.downloadingProgress.isHidden = true
                                 let confirmedPacket = Packet(type: .finishSendingVideoFile, id: tag)
-                                connectedSockets[tag].write(confirmedPacket.serialize(), withTimeout: -1, tag: tag)
+                                item2.socket.write(confirmedPacket.serialize(), withTimeout: -1, tag: tag)
                                 return
                             } catch let error {
                                 print(error)
-                                listOfItems[tag].downloadButton.stringValue = "0.0%"
-                                listOfItems[tag].downloadingProgress.isHidden = true
-                                listOfItems[tag].playingStatus.stringValue = "Error in Downloading. Try Again?"
+                                item2.collectionViewItem?.downloadButton.stringValue = "0.0%"
+                                item2.collectionViewItem?.downloadingProgress.isHidden = true
+                                item2.collectionViewItem?.playingStatus.stringValue = "Error in Downloading. Try Again?"
                                 let confirmedPacket = Packet(type: .finishSendingVideoFile, id: tag)
-                                connectedSockets[tag].write(confirmedPacket.serialize(), withTimeout: -1, tag: tag)
-                                item.currentVideoContent = NSMutableData()
-                                item.videoDownloadSize = -1
+                                item2.socket.write(confirmedPacket.serialize(), withTimeout: -1, tag: tag)
+                                item2.currentVideoContent = NSMutableData()
+                                item2.videoDownloadSize = -1
                             }
                         }
                     } else {
-                        item.videoDownloadSize = data.integer
+                        item2.videoDownloadSize = data.integer
                     }
                     return
                 }
@@ -150,34 +150,13 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
                         return
                     }
                     let connectedString = String(data: payload, encoding: String.Encoding.utf8)!
-                    listOfItems[tag].isConnected = true
-                    listOfItems[tag].connectionStatus.stringValue = connectedString
+                    currentStashedData[tag].collectionViewItem?.connectionStatus.stringValue = connectedString
                 default:
                     print("Hello")
                 }
 
             }
         }
-//        var packet: Packet!
-//        do {
-//            packet = try Packet((data as NSData) as Data)
-//        } catch {
-//             updateDisplay(data, withTag: tag)
-//        }
-//        guard let p = packet else  {
-//            updateDisplay(data, withTag: tag)
-//            return
-//        }
-//        switch p.packetType {
-//            case PacketType.handshake :
-//                let stringData = p.payload
-//                print(String(data: stringData!, encoding: String.Encoding.utf8)!)
-////            case PacketType.sendVideoData:
-////                let videoData = p.payload
-////                updateDisplay(videoData!, withTag: p.id)
-//        default:
-//            print("Hello")
-//        }
     }
 
     public func updateDisplay(_ data: Data, withTag tag: Int) {
@@ -243,9 +222,7 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
             let dictRef = unsafeBitCast(dict, to: CFMutableDictionary.self)
 
             CFDictionarySetValue(dictRef, unsafeBitCast(kCMSampleAttachmentKey_DisplayImmediately, to: UnsafeRawPointer.self), unsafeBitCast(kCFBooleanTrue, to :UnsafeRawPointer.self ))
-//            print("DisplayLayer can display? \(workspace?.listOfDisplaySampleLayer[0].isReadyForMoreMediaData)")
-//            workspace?.listOfDisplaySampleLayer[tag].enqueue(reconstructedSampleBuffer!)
-            listOfItems[tag].displayLayer.enqueue(reconstructedSampleBuffer!)
+            currentStashedData[tag].displayLayer.enqueue(reconstructedSampleBuffer!)
 
         } else {
             print("Error: ")

@@ -10,19 +10,24 @@ import Cocoa
 import AVFoundation
 
 class CollectionViewItem: NSCollectionViewItem {
+    var hasDisplayLayer = false
 
     var displayLayer = AVSampleBufferDisplayLayer()
-    var id = -1
-
-    var isPlaying = false
-
-    var isConnected = false
-
-    var isDownloading = false
+    var id = -1 {
+        didSet{
+            connectionStatus.stringValue = "\(id)"
+        }
+    }
 
 
-    var videoDownloadSize = -1
-    var currentVideoContent = NSMutableData()
+    weak var dataIPad: DataIPad! {
+        didSet {
+            self.displayLayer.removeFromSuperlayer()
+            self.displayLayer = dataIPad.displayLayer
+            self.addDisplayLayer()
+            dataIPad.collectionViewItem = self
+        }
+    }
 
     @IBOutlet weak var downloadingProgress: NSTextField!
     @IBOutlet weak var connectionStatus: NSTextField!
@@ -33,6 +38,12 @@ class CollectionViewItem: NSCollectionViewItem {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Do view setup here.
+        addDisplayLayer()
+
+    }
+
+    func addDisplayLayer() {
         view.wantsLayer = true
         let height = CGFloat(self.view.bounds.height)
         let width = CGFloat(self.view.bounds.width)
@@ -42,43 +53,57 @@ class CollectionViewItem: NSCollectionViewItem {
         displayLayer.borderWidth = 1
         displayLayer.borderColor = NSColor.blue.cgColor
         self.view.layer?.addSublayer(displayLayer)
-
-        // Do view setup here.
+        hasDisplayLayer = true
     }
+
+
     @IBAction func startStreaming(_ sender: Any) {
-        if !isPlaying {
-            isPlaying = true
+        guard let ipadInfo = dataIPad, ipadInfo.isConnected else {
+
+            return
+        }
+
+        if !dataIPad.isPlaying {
+            dataIPad.isPlaying = true
             downloadButton.isHidden = true
             self.playingStatus.stringValue = "Playing"
             let packet = Packet(type: .play, id: id)
-            TCPSocketManager.sharedManager.connectedSockets[id].write(packet.serialize(), withTimeout: -1, tag: id)
+            ipadInfo.socket.write(packet.serialize(), withTimeout: -1, tag: id)
         }
     }
 
     @IBAction func stopStreaming(_ sender: Any) {
-        if isPlaying {
-            isPlaying = false
+        stopStreaming()
+    }
+
+    func stopStreaming() {
+
+        guard let ipadInfo = dataIPad, ipadInfo.isConnected else {
+            return
+        }
+        if dataIPad.isPlaying {
+            dataIPad.isPlaying = false
             downloadButton.isHidden = false
             self.playingStatus.stringValue = "Stopped"
             let packet = Packet(type: .stop, id: id)
-            TCPSocketManager.sharedManager.connectedSockets[id].write(packet.serialize(), withTimeout: -1, tag: id)
+            ipadInfo.socket.write(packet.serialize(), withTimeout: -1, tag: id)
         }
     }
 
     @IBAction func downloadTheFile(_ sender: Any) {
         self.playingStatus.stringValue = "Telling the Ipad to Upload the Video File ..."
         let packet = Packet(type: .sendVideoFile, id: id)
-        isDownloading = true
+        dataIPad.isDownloading = true
 
         self.downloadingProgress.isHidden = false
-        TCPSocketManager.sharedManager.connectedSockets[id].write(packet.serialize(), withTimeout: -1, tag: id)
+        dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
 
     }
     override func viewDidAppear() {
-        print("Hello")
     }
 
     override func viewDidDisappear() {
-         print("Disappear")
+        stopStreaming()
+
     }
 }

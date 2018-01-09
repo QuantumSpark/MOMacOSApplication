@@ -13,7 +13,9 @@ class ViewController: NSViewController {
     @IBOutlet weak var collectionView: NSCollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        for _ in 0..<28 {
+             TCPSocketManager.sharedManager.currentStashedData.append(DataIPad())
+        }
         
         configureCollectionView()
         // Do any additional setup after loading the view.
@@ -50,24 +52,23 @@ class ViewController: NSViewController {
 
 extension ViewController : NSCollectionViewDataSource {
 
-    // 1
     func numberOfSections(in collectionView: NSCollectionView) -> Int {
         return 1
     }
 
-    // 2
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
         return 28
     }
 
-    // 3
     func collectionView(_ itemForRepresentedObjectAtcollectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
 
-        // 4
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "CollectionViewItem"), for: indexPath) as! CollectionViewItem
 
+        item.id = indexPath.item
 
-        TCPSocketManager.sharedManager.listOfItems.append(item)
+        item.dataIPad = TCPSocketManager.sharedManager.currentStashedData[indexPath.item]
+
+        TCPSocketManager.sharedManager.currentStashedData[indexPath.item].id = indexPath.item
         return item
     }
 
