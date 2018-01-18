@@ -58,8 +58,15 @@ class CollectionViewItem: NSCollectionViewItem {
 
 
     @IBAction func startStreaming(_ sender: Any) {
-        guard let ipadInfo = dataIPad, ipadInfo.isConnected else {
+        startStreaming()
+    }
 
+    @IBAction func stopStreaming(_ sender: Any) {
+        stopStreaming()
+    }
+
+    func startStreaming(){
+        guard let ipadInfo = dataIPad, ipadInfo.isConnected else {
             return
         }
 
@@ -70,10 +77,6 @@ class CollectionViewItem: NSCollectionViewItem {
             let packet = Packet(type: .play, id: id)
             ipadInfo.socket.write(packet.serialize(), withTimeout: -1, tag: id)
         }
-    }
-
-    @IBAction func stopStreaming(_ sender: Any) {
-        stopStreaming()
     }
 
     func stopStreaming() {
@@ -100,6 +103,7 @@ class CollectionViewItem: NSCollectionViewItem {
 
     }
     override func viewDidAppear() {
+        startStreaming()
     }
 
     override func viewDidDisappear() {
