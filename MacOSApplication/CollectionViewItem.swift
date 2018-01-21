@@ -29,18 +29,27 @@ class CollectionViewItem: NSCollectionViewItem {
         }
     }
 
+
     @IBOutlet weak var downloadingProgress: NSTextField!
     @IBOutlet weak var connectionStatus: NSTextField!
     @IBOutlet weak var playingStatus: NSTextField!
     @IBOutlet weak var playButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
     @IBOutlet weak var downloadButton: NSButton!
-
+    @IBOutlet weak var cameraExposure: NSSlider!
+    
+    @IBAction func changeExposure(_ sender: Any) {
+        print("Value of Slider bar: \(cameraExposure.doubleValue)")
+        let packet = Packet(type: .changeExposure, id: id, payload: NSData(bytes: &cameraExposure.floatValue, length: MemoryLayout<Float>.size) as Data)
+        dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
         addDisplayLayer()
-
+        cameraExposure.doubleValue = 0.5;
+        cameraExposure.maxValue = 1;
+        cameraExposure.minValue = 0;
     }
 
     func addDisplayLayer() {
@@ -57,6 +66,8 @@ class CollectionViewItem: NSCollectionViewItem {
     }
 
 
+    
+    
     @IBAction func startStreaming(_ sender: Any) {
         startStreaming()
     }
@@ -102,6 +113,8 @@ class CollectionViewItem: NSCollectionViewItem {
         dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
 
     }
+    
+    
     override func viewDidAppear() {
         startStreaming()
     }
