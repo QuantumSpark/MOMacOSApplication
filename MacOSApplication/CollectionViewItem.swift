@@ -39,7 +39,6 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBOutlet weak var cameraExposure: NSSlider!
     
     @IBAction func changeExposure(_ sender: Any) {
-        print("Value of Slider bar: \(cameraExposure.doubleValue)")
         let packet = Packet(type: .changeExposure, id: id, payload: NSData(bytes: &cameraExposure.floatValue, length: MemoryLayout<Float>.size) as Data)
         dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
     }
@@ -47,7 +46,6 @@ class CollectionViewItem: NSCollectionViewItem {
     override func viewDidLoad() {
         super.viewDidLoad()
         addDisplayLayer()
-        cameraExposure.doubleValue = 0.5;
         cameraExposure.maxValue = 1;
         cameraExposure.minValue = 0;
     }
@@ -65,9 +63,6 @@ class CollectionViewItem: NSCollectionViewItem {
         hasDisplayLayer = true
     }
 
-
-    
-    
     @IBAction func startStreaming(_ sender: Any) {
         startStreaming()
     }
@@ -76,6 +71,15 @@ class CollectionViewItem: NSCollectionViewItem {
         stopStreaming()
     }
 
+    @IBAction func zoomIn(_ sender: Any) {
+        let packet = Packet(type: .zoomIn, id: id)
+        dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
+    }
+    
+    @IBAction func zoomOut(_ sender: Any) {
+        let packet = Packet(type: .zoomOut, id: id)
+        dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
+    }
     func startStreaming(){
         guard let ipadInfo = dataIPad, ipadInfo.isConnected else {
             return

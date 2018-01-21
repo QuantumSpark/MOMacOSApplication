@@ -87,11 +87,33 @@
                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oil-TM-tnI">
                     <rect key="frame" x="310" y="452" width="96" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" allowsTickMarkValuesOnly="YES" sliderType="linear" id="3kH-kN-apJ"/>
+                    <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" allowsTickMarkValuesOnly="YES" sliderType="linear" id="3kH-kN-apJ"/>
                     <connections>
                         <action selector="changeExposure:" target="-2" id="1Zs-bW-Ijh"/>
                     </connections>
                 </slider>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jdz-iz-Psl">
+                    <rect key="frame" x="29" y="13" width="49" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="+" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="B3f-Yp-rR7">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="zoomIn:" target="-2" id="UV8-um-4wh"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eFa-37-Yc2">
+                    <rect key="frame" x="65" y="13" width="47" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="-" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JLM-mb-Yij">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="zoomOut:" target="-2" id="KU6-1P-oQ5"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="139" y="293.5"/>
         </customView>

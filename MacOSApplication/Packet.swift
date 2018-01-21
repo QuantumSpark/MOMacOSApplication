@@ -30,6 +30,10 @@ public struct PacketType: RawRepresentable, Equatable {
     public static let finishSendingVideoFile = PacketType(rawValue: 5)
 
     public static let changeExposure = PacketType(rawValue:6)
+    
+    public static let zoomIn = PacketType(rawValue: 7)
+    
+    public static let zoomOut = PacketType(rawValue: 8)
 
     public static func == (lhs: PacketType, rhs: PacketType) -> Bool {
         return lhs.rawValue == rhs.rawValue
