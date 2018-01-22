@@ -87,9 +87,9 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
 
     public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         sock.readData(withTimeout: -1, tag: tag)
-        if tag > -1 {
+        
             let item2 = currentStashedData[tag]
-            if currentStashedData[tag].isConnected {
+            if currentStashedData[tag].isConnected && currentStashedData[tag].hasFinishedSettingUp {
 
                 if  item2.isDownloading {
                     if item2.videoDownloadSize > -1 {
@@ -129,18 +129,16 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
                 }
 
                 updateDisplay(data, withTag: tag)
-
-            }   else  {
-
-
+                
+            } else if !currentStashedData[tag].hasFinishedSettingUp {
                 var p:Packet?
-
+                
                 do {
                     p = try Packet((data as NSData) as Data)
                 } catch {
                     return
                 }
-
+                
                 guard let packet = p else {
                     return
                 }
@@ -151,12 +149,20 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
                     }
                     let connectedString = String(data: payload, encoding: String.Encoding.utf8)!
                     currentStashedData[tag].collectionViewItem?.connectionStatus.stringValue = connectedString
+                case PacketType.redGain:
+                    item2.collectionViewItem?.whiteBalanceRed.floatValue = (packet.payload?.float)!
+                case PacketType.greenGain:
+                     item2.collectionViewItem?.whiteBalanceGreen.floatValue = (packet.payload?.float)!
+                case PacketType.blueGain:
+                    item2.collectionViewItem?.whiteBalanceBlue.floatValue = (packet.payload?.float)!
+                    currentStashedData[tag].hasFinishedSettingUp = true
                 default:
                     print("Hello")
                 }
-
+                
             }
-        }
+
+
     }
 
     public func updateDisplay(_ data: Data, withTag tag: Int) {

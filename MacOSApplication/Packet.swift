@@ -34,7 +34,13 @@ public struct PacketType: RawRepresentable, Equatable {
     public static let zoomIn = PacketType(rawValue: 7)
     
     public static let zoomOut = PacketType(rawValue: 8)
-
+    
+    public static let changeFocus = PacketType(rawValue: 9)
+    
+    public static let redGain = PacketType(rawValue: 10)
+    public static let greenGain = PacketType(rawValue: 11)
+    public static let blueGain = PacketType(rawValue: 12)
+    
     public static func == (lhs: PacketType, rhs: PacketType) -> Bool {
         return lhs.rawValue == rhs.rawValue
     }

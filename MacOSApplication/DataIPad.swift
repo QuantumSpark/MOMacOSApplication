@@ -17,6 +17,7 @@ class DataIPad {
     var displayLayer =  AVSampleBufferDisplayLayer()
     var isPlaying = false
     var isConnected = false
+    var hasFinishedSettingUp = false
     var isDownloading = false {
         didSet {
 

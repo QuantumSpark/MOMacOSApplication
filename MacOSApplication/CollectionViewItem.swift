@@ -37,6 +37,9 @@ class CollectionViewItem: NSCollectionViewItem {
     @IBOutlet weak var stopButton: NSButton!
     @IBOutlet weak var downloadButton: NSButton!
     @IBOutlet weak var cameraExposure: NSSlider!
+    @IBOutlet weak var whiteBalanceRed: NSSlider!
+    @IBOutlet weak var whiteBalanceGreen: NSSlider!
+    @IBOutlet weak var whiteBalanceBlue: NSSlider!
     
     @IBAction func changeExposure(_ sender: Any) {
         let packet = Packet(type: .changeExposure, id: id, payload: NSData(bytes: &cameraExposure.floatValue, length: MemoryLayout<Float>.size) as Data)
@@ -48,6 +51,12 @@ class CollectionViewItem: NSCollectionViewItem {
         addDisplayLayer()
         cameraExposure.maxValue = 1;
         cameraExposure.minValue = 0;
+        whiteBalanceRed.maxValue = 4;
+        whiteBalanceGreen.maxValue = 4;
+        whiteBalanceBlue.maxValue = 4;
+        whiteBalanceRed.minValue = 1;
+        whiteBalanceGreen.minValue = 1;
+        whiteBalanceBlue.minValue = 1;
     }
 
     func addDisplayLayer() {
@@ -117,6 +126,23 @@ class CollectionViewItem: NSCollectionViewItem {
         dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
 
     }
+    
+ 
+    @IBAction func changeWhiteBalanceRed(_ sender: Any) {
+        let packet = Packet(type: .redGain, id: id, payload: NSData(bytes: &whiteBalanceRed.floatValue, length: MemoryLayout<Float>.size) as Data)
+        dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
+    }
+    
+    @IBAction func changeWhiteBalanceGreen(_ sender: Any) {
+        let packet = Packet(type: .greenGain, id: id, payload: NSData(bytes: &whiteBalanceGreen.floatValue, length: MemoryLayout<Float>.size) as Data)
+        dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
+    }
+    
+    @IBAction func changeWhiteBalanceBlue(_ sender: Any) {
+        let packet = Packet(type: .blueGain, id: id, payload: NSData(bytes: &whiteBalanceBlue.floatValue, length: MemoryLayout<Float>.size) as Data)
+        dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
+    }
+    
     
     
     override func viewDidAppear() {
