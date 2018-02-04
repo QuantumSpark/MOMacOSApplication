@@ -10,6 +10,7 @@
 		0C8355129D301212B340B6A5 /* Pods_MacOSApplicationUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B74ACB5B6D4CAC75EC9EA7ED /* Pods_MacOSApplicationUITests.framework */; };
 		43C8439479854CAA95C60BB1 /* Pods_MacOSApplication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 900CC0E10DC0551E8EBABC84 /* Pods_MacOSApplication.framework */; };
 		6B6E78FC4A5516CA3D1B6E52 /* Pods_MacOSApplicationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F30E7D6944BB17EB84E594B2 /* Pods_MacOSApplicationTests.framework */; };
+		D01A002E2027AE8A000D56CA /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01A002D2027AE8A000D56CA /* PopoverViewController.swift */; };
 		D07438662001663900E7DA3D /* Packet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07438652001663900E7DA3D /* Packet.swift */; };
 		D074386A2001774C00E7DA3D /* UDPSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07438692001774C00E7DA3D /* UDPSocketManager.swift */; };
 		D089B9911FFC92C600793B3F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D089B9901FFC92C600793B3F /* AppDelegate.swift */; };
@@ -50,6 +51,7 @@
 		B74ACB5B6D4CAC75EC9EA7ED /* Pods_MacOSApplicationUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MacOSApplicationUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0C68E8AEC0B806A9D3DFE22 /* Pods-MacOSApplication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MacOSApplication.release.xcconfig"; path = "Pods/Target Support Files/Pods-MacOSApplication/Pods-MacOSApplication.release.xcconfig"; sourceTree = "<group>"; };
 		C6795BB998FD64A6EA7EEB49 /* Pods-MacOSApplicationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MacOSApplicationTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MacOSApplicationTests/Pods-MacOSApplicationTests.release.xcconfig"; sourceTree = "<group>"; };
+		D01A002D2027AE8A000D56CA /* PopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverViewController.swift; sourceTree = "<group>"; };
 		D07438652001663900E7DA3D /* Packet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packet.swift; sourceTree = "<group>"; };
 		D07438692001774C00E7DA3D /* UDPSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDPSocketManager.swift; sourceTree = "<group>"; };
 		D089B98D1FFC92C600793B3F /* MacOSApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacOSApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +165,7 @@
 				D07438652001663900E7DA3D /* Packet.swift */,
 				D07438692001774C00E7DA3D /* UDPSocketManager.swift */,
 				D0E7A638200315BF00F001FB /* DataIPad.swift */,
+				D01A002D2027AE8A000D56CA /* PopoverViewController.swift */,
 			);
 			path = MacOSApplication;
 			sourceTree = "<group>";
@@ -417,7 +420,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		DCDA65F4BD88F6052CB3C090 /* [CP] Check Pods Manifest.lock */ = {
@@ -435,7 +438,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		F9046F42AD00F7373CEAADF2 /* [CP] Embed Pods Frameworks */ = {
@@ -468,7 +471,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -485,6 +488,7 @@
 				D0D560E61FFF22EA009571E9 /* Helper.swift in Sources */,
 				D07438662001663900E7DA3D /* Packet.swift in Sources */,
 				D089B9911FFC92C600793B3F /* AppDelegate.swift in Sources */,
+				D01A002E2027AE8A000D56CA /* PopoverViewController.swift in Sources */,
 				D089B9C01FFC94CF00793B3F /* CollectionViewItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,8 +9,11 @@
 import Cocoa
 import AVFoundation
 
-class CollectionViewItem: NSCollectionViewItem {
+class CollectionViewItem: NSCollectionViewItem, NSPopoverDelegate {
     var hasDisplayLayer = false
+
+    var settingPopover:NSPopover?
+    var popUpViewController: PopoverViewController?
 
     var displayLayer = AVSampleBufferDisplayLayer()
     var id = -1 {
@@ -57,6 +60,11 @@ class CollectionViewItem: NSCollectionViewItem {
         whiteBalanceRed.minValue = 1;
         whiteBalanceGreen.minValue = 1;
         whiteBalanceBlue.minValue = 1;
+
+        popUpViewController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "PopoverViewController")) as! PopoverViewController
+//        [self.storyboard instantiateControllerWithIdentifier:@"PopoverViewController"];
+
+
     }
 
     func addDisplayLayer() {
@@ -89,6 +97,21 @@ class CollectionViewItem: NSCollectionViewItem {
         let packet = Packet(type: .zoomOut, id: id)
         dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
     }
+
+    @IBAction func displayPopover(_ sender: Any) {
+
+        settingPopover = NSPopover()
+        settingPopover?.contentViewController = self.popUpViewController!
+        settingPopover?.contentSize = NSMakeSize(500.0, 500.0)
+        settingPopover?.animates = true
+        self.settingPopover?.behavior = .transient
+        self.settingPopover?.delegate = self
+
+        let entryRect: NSRect = (((sender as AnyObject).convert((sender as AnyObject).bounds, to: NSApp.mainWindow?.contentView as? NSView)) as? NSRect)!
+        // Show popover
+        settingPopover?.show(relativeTo: entryRect, of: NSApp.mainWindow?.contentView ?? NSView(), preferredEdge: NSRectEdge.minY)
+    }
+
     func startStreaming(){
         guard let ipadInfo = dataIPad, ipadInfo.isConnected else {
             return
@@ -142,15 +165,37 @@ class CollectionViewItem: NSCollectionViewItem {
         let packet = Packet(type: .blueGain, id: id, payload: NSData(bytes: &whiteBalanceBlue.floatValue, length: MemoryLayout<Float>.size) as Data)
         dataIPad.socket.write(packet.serialize(), withTimeout: -1, tag: id)
     }
-    
-    
-    
+
     override func viewDidAppear() {
         startStreaming()
     }
 
     override func viewDidDisappear() {
         stopStreaming()
-
     }
+
+
+
+    func createPopover() {
+
+
+        
+    }
+
+
+    func popoverWillShow(_ notification: Notification) {
+        let popover = notification.object
+        if (popover != nil)
+        {
+
+        }
+    }
+    func popoverDidShow(_ notification: Notification) {
+        print("Fuck you: It's showing ")
+    }
+
+    func popoverDidClose(_ notification: Notification) {
+        print("Fuck you. It's closing")
+    }
+
 }

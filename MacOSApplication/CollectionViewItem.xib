@@ -177,6 +177,17 @@
                         <action selector="changeWhiteBalanceGreen:" target="-2" id="qFJ-kr-bzH"/>
                     </connections>
                 </slider>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2vX-yr-D5F">
+                    <rect key="frame" x="186" y="13" width="85" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="push" title="Show S" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UoM-EV-AgN">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="displayPopover:" target="-2" id="ykf-lS-MLb"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="139" y="293.5"/>
         </customView>
