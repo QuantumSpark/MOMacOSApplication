@@ -150,11 +150,11 @@ open class TCPSocketManager: NSObject, GCDAsyncSocketDelegate {
                     let connectedString = String(data: payload, encoding: String.Encoding.utf8)!
                     currentStashedData[tag].collectionViewItem?.connectionStatus.stringValue = connectedString
                 case PacketType.redGain:
-                    item2.collectionViewItem?.whiteBalanceRed.floatValue = (packet.payload?.float)!
+                    item2.collectionViewItem.popUpViewController?.initialRedBalance = (packet.payload?.float)!
                 case PacketType.greenGain:
-                     item2.collectionViewItem?.whiteBalanceGreen.floatValue = (packet.payload?.float)!
+                    item2.collectionViewItem.popUpViewController?.intialGreenBalance = (packet.payload?.float)!
                 case PacketType.blueGain:
-                    item2.collectionViewItem?.whiteBalanceBlue.floatValue = (packet.payload?.float)!
+                    item2.collectionViewItem.popUpViewController?.initialBlueBalance = (packet.payload?.float)!
                     currentStashedData[tag].hasFinishedSettingUp = true
                 default:
                     print("Hello")
